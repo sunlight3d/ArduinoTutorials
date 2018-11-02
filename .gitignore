@@ -1,6 +1,7 @@
 # Prerequisites
 *.d
-
+video
+video/
 # Object files
 *.o
 *.ko
