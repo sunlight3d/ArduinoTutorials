@@ -4,7 +4,7 @@
 */
 int PWM_PIN10 = 10;//make pin10 as OUTPUT
 int step = 5;
-int brightness = 255;
+int brightness = 0;
 
 void setup() {
   //run once  
