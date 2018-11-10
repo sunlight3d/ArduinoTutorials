@@ -1,7 +1,7 @@
 /*
  * Nguyen Duc Hoang - Programming tutorial channel
  * https://www.youtube.com/c/nguyenduchoang
- * Create push button
+ * Create push button to turn on/off a LED
 */
 const int BUTTON_PIN = 2;//Pin2 connected to Button
 const int LED_PIN = 13;//Pin13 connected to a LED
