@@ -3,9 +3,10 @@
  * https://www.youtube.com/c/nguyenduchoang
  * Create push button to turn on/off a LED
 */
+//Define constants
 const int BUTTON_PIN = 2;//Pin2 connected to Button
-const int LED_PIN = 13;//Pin13 connected to a LED
-int currentButtonState = 0;
+const int LED_PIN = 13;//Pin3 connected to a LED
+int currentButtonState = 0;//HIGH / LOW
 
 void setup() {
   //run once  
@@ -13,12 +14,12 @@ void setup() {
   pinMode(LED_PIN, OUTPUT);  
 }
 
-void loop() {  
-  //Run repeatedly 
+void loop() {   
+  //Run repeatedly   
   currentButtonState = digitalRead(BUTTON_PIN);
   if(currentButtonState == HIGH) {
-  	digitalWrite(LED_PIN, HIGH);    
+    digitalWrite(LED_PIN, HIGH);    
   } else {
-  	digitalWrite(LED_PIN, LOW);
+    digitalWrite(LED_PIN, LOW);
   }
 }
