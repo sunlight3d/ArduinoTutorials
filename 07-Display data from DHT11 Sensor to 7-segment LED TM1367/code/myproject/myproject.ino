@@ -11,7 +11,8 @@ DHT dhtSensor(DHT_SENSOR, DHT11);
 void setup() {
   // put your setup code here, to run once:
   display.clear();
-  display.setBrightness(7);//max light  
+  display.setBrightness(7);//max light    
+  dhtSensor.begin();
 }
 
 void loop() {
@@ -21,11 +22,12 @@ void loop() {
     delay(500);//0.5 second
   } 
   */
-  measure();
-  delay(2000);
+  measure();  
+  delay(2000);  
 }
 void measure() {
   float humidity = dhtSensor.readHumidity();
-  float temperature = dhtSensor.readTemperature();
-  display.showNumberDec(temperature);  
+  float temperature = dhtSensor.readTemperature();  
+  //display.showNumberDec(temperature);  
+  display.showNumberDec(humidity);  
 }
