@@ -5,7 +5,7 @@
 #define DIO 3
 
 TM1637Display display = TM1637Display(CLK, DIO);
-int RED = 4; //pin 4 in Arduino
+int RED = 4; //pin D4
 int YELLOW = 5;
 int GREEN = 6;
 
