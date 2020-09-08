@@ -143,8 +143,8 @@ void motor_2_Tien(int speed) { //speed: từ 0 - MAX_SPEED
   speed = constrain(speed, MIN_SPEED, MAX_SPEED);
   digitalWrite(IN4, LOW);
   digitalWrite(IN3, HIGH);
-  //analogWrite(IN3, speed);
-  analogWrite(ENB, speed);
+  analogWrite(IN3, speed);
+  //analogWrite(ENB, speed);
 }
 void motor_2_Dung() {
   digitalWrite(IN3, LOW);
@@ -162,8 +162,8 @@ void motor_1_Tien(int speed) { //speed: từ 0 - MAX_SPEED
   speed = constrain(speed, MIN_SPEED, MAX_SPEED);
   digitalWrite(IN2, LOW);
   digitalWrite(IN1, HIGH);
-  //analogWrite(IN1, speed);
-  analogWrite(ENA, speed);
+  analogWrite(IN1, speed);
+  //analogWrite(ENA, speed);
 }
 void motor_1_Dung() {
   digitalWrite(IN1, LOW);
@@ -182,7 +182,7 @@ void loop()
     //delay(5000);
     motor_1_Tien(150);
     motor_2_Tien(150); 
-  delay(5000);//tiến 5 s
+  //delay(5000);//tiến 5 s
 //  motor_2_Dung();
   //motor_1_Dung();
 //  delay(2000);
