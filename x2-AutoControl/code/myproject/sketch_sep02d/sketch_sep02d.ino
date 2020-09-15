@@ -1,11 +1,15 @@
 #define IN1 6
 #define IN2 7
-#define ENB 2
+#define ENB 10
 
 #define IN3 5
 #define IN4 4
-#define ENA 3
+#define ENA 9
+
+
+
 #include <NewPing.h>
+#include <L298N.h>
 
 int MAX_SPEED = 255; 
 int MIN_SPEED = 0;
@@ -17,58 +21,21 @@ NewPing srf05(TRIGGER_PIN,ECHO_PIN,100);
 
 enum State {Forward, Back, Left, Right};
 enum State currentState = Forward;
+L298N::Direction direction = L298N::FORWARD;
 
+L298N motor1(ENB, IN2, IN1);
+L298N motor2(ENA, IN4, IN3);
 void setup()
 {
-  pinMode(IN1, OUTPUT);
-  pinMode(IN2, OUTPUT);
-  pinMode(ENA, OUTPUT);
-  
-  pinMode(IN3, OUTPUT);
-  pinMode(IN4, OUTPUT);
-  pinMode(ENB, OUTPUT);
   
   Serial.begin (9600);
   pinMode (TRIGGER_PIN, OUTPUT);
   pinMode (ECHO_PIN, INPUT);
-}
-void motor2Lui(int speed) { //speed: từ 0 - MAX_SPEED
-  speed = constrain(speed, MIN_SPEED, MAX_SPEED);
-  digitalWrite(IN4, LOW);
-  digitalWrite(IN3, HIGH);
-  analogWrite(IN3, speed);
-  //analogWrite(ENB, speed);
-}
-void motor2Dung() {
-  digitalWrite(IN3, LOW);
-  digitalWrite(IN4, LOW);
-}
-void motor2Tien(int speed) {
-  speed = constrain(speed, MIN_SPEED, MAX_SPEED);
-  
-  digitalWrite(IN4, HIGH);
-  digitalWrite(IN3, LOW);
-  analogWrite(IN3, speed);
+
+  motor1.setSpeed(70);
+  motor2.setSpeed(70);
 }
 
-void motor1Lui(int speed) { //speed: từ 0 - MAX_SPEED
-  speed = constrain(speed, MIN_SPEED, MAX_SPEED);
-  digitalWrite(IN2, LOW);
-  digitalWrite(IN1, HIGH);
-  analogWrite(IN1, speed);
-  //analogWrite(ENA, speed);
-}
-void motor1Dung() {
-  digitalWrite(IN1, LOW);
-  digitalWrite(IN2, LOW);
-}
-
-void motor1Tien(int speed) {
-  speed = constrain(speed, MIN_SPEED, MAX_SPEED);  
-  digitalWrite(IN2, HIGH);
-  digitalWrite(IN1, LOW);
-  analogWrite(IN1, speed);
-}
 int measureDistance() {
   /*
   digitalWrite (TRIGGER_PIN, HIGH);
@@ -80,30 +47,25 @@ int measureDistance() {
   int distance = srf05.ping_cm();
   return distance;
 }
-void moveBack() {
-  motor1Lui(50);
-  motor2Lui(50); 
-}
-void moveForward() {
-  motor1Tien(50);
-  motor2Tien(50); 
-}
-void stop() {
-  motor1Dung();
-  motor2Dung();
-}
+
+
 void loop()
 {     
-    delay(3000);
-    stop();
-    moveForward();  
+    motor1.run(direction);
+    motor2.run(direction);
+    
     distance = measureDistance();
-    Serial.println(distance);
+    
     if (distance <= 10 && distance > 0) {
-      stop();      
-      moveBack();
-      distance = 100;
-    }
+      direction = direction == L298N::FORWARD ? L298N::BACKWARD : L298N::FORWARD;
+      Serial.println(distance);
+      Serial.println("direction");
+      Serial.println(direction);
+      motor1.runFor(2000,direction);
+      motor2.runFor(2000,direction);
+      delay(1000);
+    } 
+    //turningTime++;
     
 }
 
