@@ -9,6 +9,7 @@
 
 int MAX_SPEED = 255; 
 int MIN_SPEED = 0;
+int distance  = 0;
 
 int TRIGGER_PIN = 2;
 int ECHO_PIN = 3;
@@ -87,27 +88,23 @@ void moveForward() {
   motor1Tien(50);
   motor2Tien(50); 
 }
+void stop() {
+  motor1Dung();
+  motor2Dung();
+}
 void loop()
 {     
-  
+    delay(3000);
+    stop();
     moveForward();  
-    //moveBack();
-//    if(currentState == Forward) {
-//      moveForward();      
-//    } else if(currentState == Back) {
-//      moveBack();
-//    }
-//    
-//    int distance = measureDistance();
-//    Serial.println(distance);
-//    if (distance <= 10) {
-//      if(currentState == Forward) {
-//        currentState = Back;        
-//      } else if(currentState == Back){
-//        currentState = Forward;
-//      } 
-//      delay(2000);
-//    }
+    distance = measureDistance();
+    Serial.println(distance);
+    if (distance <= 10 && distance > 0) {
+      stop();      
+      moveBack();
+      distance = 100;
+    }
+    
 }
 
 /*#define inA1 5
