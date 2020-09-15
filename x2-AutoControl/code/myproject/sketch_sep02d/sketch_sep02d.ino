@@ -31,7 +31,7 @@ void setup()
   pinMode (TRIGGER_PIN, OUTPUT);
   pinMode (ECHO_PIN, INPUT);
 }
-void motor2Tien(int speed) { //speed: từ 0 - MAX_SPEED
+void motor2Lui(int speed) { //speed: từ 0 - MAX_SPEED
   speed = constrain(speed, MIN_SPEED, MAX_SPEED);
   digitalWrite(IN4, LOW);
   digitalWrite(IN3, HIGH);
@@ -42,7 +42,7 @@ void motor2Dung() {
   digitalWrite(IN3, LOW);
   digitalWrite(IN4, LOW);
 }
-void motor2Lui(int speed) {
+void motor2Tien(int speed) {
   speed = constrain(speed, MIN_SPEED, MAX_SPEED);
   
   digitalWrite(IN4, HIGH);
@@ -50,7 +50,7 @@ void motor2Lui(int speed) {
   analogWrite(IN3, speed);
 }
 
-void motor1Tien(int speed) { //speed: từ 0 - MAX_SPEED
+void motor1Lui(int speed) { //speed: từ 0 - MAX_SPEED
   speed = constrain(speed, MIN_SPEED, MAX_SPEED);
   digitalWrite(IN2, LOW);
   digitalWrite(IN1, HIGH);
@@ -62,7 +62,7 @@ void motor1Dung() {
   digitalWrite(IN2, LOW);
 }
 
-void motor1Lui(int speed) {
+void motor1Tien(int speed) {
   speed = constrain(speed, MIN_SPEED, MAX_SPEED);  
   digitalWrite(IN2, HIGH);
   digitalWrite(IN1, LOW);
@@ -79,34 +79,35 @@ int measureDistance() {
   int distance = srf05.ping_cm();
   return distance;
 }
-void moveForward() {
-  motor1Tien(50);
-  motor2Tien(50); 
-}
 void moveBack() {
   motor1Lui(50);
   motor2Lui(50); 
+}
+void moveForward() {
+  motor1Tien(50);
+  motor2Tien(50); 
 }
 void loop()
 {     
   
     moveForward();  
-    if(currentState == Forward) {
-      moveForward();      
-    } else if(currentState == Back) {
-      moveBack();
-    }
-    
-    int distance = measureDistance();
-    Serial.println(distance);
-    if (distance <= 10) {
-      if(currentState == Forward) {
-        currentState = Back;        
-      } else if(currentState == Back){
-        currentState = Forward;
-      } 
-      delay(2000);
-    }
+    //moveBack();
+//    if(currentState == Forward) {
+//      moveForward();      
+//    } else if(currentState == Back) {
+//      moveBack();
+//    }
+//    
+//    int distance = measureDistance();
+//    Serial.println(distance);
+//    if (distance <= 10) {
+//      if(currentState == Forward) {
+//        currentState = Back;        
+//      } else if(currentState == Back){
+//        currentState = Forward;
+//      } 
+//      delay(2000);
+//    }
 }
 
 /*#define inA1 5
