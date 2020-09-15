@@ -1,3 +1,113 @@
+#define IN1 6
+#define IN2 7
+#define ENB 2
+
+#define IN3 5
+#define IN4 4
+#define ENA 3
+#include <NewPing.h>
+
+int MAX_SPEED = 255; 
+int MIN_SPEED = 0;
+
+int TRIGGER_PIN = 2;
+int ECHO_PIN = 3;
+NewPing srf05(TRIGGER_PIN,ECHO_PIN,100);
+
+enum State {Forward, Back, Left, Right};
+enum State currentState = Forward;
+
+void setup()
+{
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(ENA, OUTPUT);
+  
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+  pinMode(ENB, OUTPUT);
+  
+  Serial.begin (9600);
+  pinMode (TRIGGER_PIN, OUTPUT);
+  pinMode (ECHO_PIN, INPUT);
+}
+void motor2Tien(int speed) { //speed: từ 0 - MAX_SPEED
+  speed = constrain(speed, MIN_SPEED, MAX_SPEED);
+  digitalWrite(IN4, LOW);
+  digitalWrite(IN3, HIGH);
+  analogWrite(IN3, speed);
+  //analogWrite(ENB, speed);
+}
+void motor2Dung() {
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
+}
+void motor2Lui(int speed) {
+  speed = constrain(speed, MIN_SPEED, MAX_SPEED);
+  
+  digitalWrite(IN4, HIGH);
+  digitalWrite(IN3, LOW);
+  analogWrite(IN3, speed);
+}
+
+void motor1Tien(int speed) { //speed: từ 0 - MAX_SPEED
+  speed = constrain(speed, MIN_SPEED, MAX_SPEED);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN1, HIGH);
+  analogWrite(IN1, speed);
+  //analogWrite(ENA, speed);
+}
+void motor1Dung() {
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+}
+
+void motor1Lui(int speed) {
+  speed = constrain(speed, MIN_SPEED, MAX_SPEED);  
+  digitalWrite(IN2, HIGH);
+  digitalWrite(IN1, LOW);
+  analogWrite(IN1, speed);
+}
+int measureDistance() {
+  /*
+  digitalWrite (TRIGGER_PIN, HIGH);
+  delayMicroseconds (10);
+  digitalWrite (TRIGGER_PIN, LOW);
+  int time = pulseIn (ECHO_PIN, HIGH);
+  int distance = (time * 0.034) / 2;  //The speed of sound in cm/us is 0.034cm/us
+  */
+  int distance = srf05.ping_cm();
+  return distance;
+}
+void moveForward() {
+  motor1Tien(50);
+  motor2Tien(50); 
+}
+void moveBack() {
+  motor1Lui(50);
+  motor2Lui(50); 
+}
+void loop()
+{     
+  
+    moveForward();  
+    if(currentState == Forward) {
+      moveForward();      
+    } else if(currentState == Back) {
+      moveBack();
+    }
+    
+    int distance = measureDistance();
+    Serial.println(distance);
+    if (distance <= 10) {
+      if(currentState == Forward) {
+        currentState = Back;        
+      } else if(currentState == Back){
+        currentState = Forward;
+      } 
+      delay(2000);
+    }
+}
 
 /*#define inA1 5
 #define inB1 3
@@ -119,74 +229,3 @@ void serialEvent(){
   }
 }
 */
-#define IN1 6
-#define IN2 7
-#define ENB 2
-
-#define IN3 5
-#define IN4 4
-#define ENA 3
-
-int MAX_SPEED = 255; 
-int MIN_SPEED = 0;
-void setup()
-{
-  pinMode(IN1, OUTPUT);
-  pinMode(IN2, OUTPUT);
-  pinMode(ENA, OUTPUT);
-  
-  pinMode(IN3, OUTPUT);
-  pinMode(IN4, OUTPUT);
-  pinMode(ENB, OUTPUT);
-}
-void motor_2_Tien(int speed) { //speed: từ 0 - MAX_SPEED
-  speed = constrain(speed, MIN_SPEED, MAX_SPEED);
-  digitalWrite(IN4, LOW);
-  digitalWrite(IN3, HIGH);
-  analogWrite(IN3, speed);
-  //analogWrite(ENB, speed);
-}
-void motor_2_Dung() {
-  digitalWrite(IN3, LOW);
-  digitalWrite(IN4, LOW);
-}
-void motor_2_Lui(int speed) {
-  speed = constrain(speed, MIN_SPEED, MAX_SPEED);
-  
-  digitalWrite(IN4, HIGH);
-  digitalWrite(IN3, LOW);
-  analogWrite(IN3, 255 - speed);
-}
-
-void motor_1_Tien(int speed) { //speed: từ 0 - MAX_SPEED
-  speed = constrain(speed, MIN_SPEED, MAX_SPEED);
-  digitalWrite(IN2, LOW);
-  digitalWrite(IN1, HIGH);
-  analogWrite(IN1, speed);
-  //analogWrite(ENA, speed);
-}
-void motor_1_Dung() {
-  digitalWrite(IN1, LOW);
-  digitalWrite(IN2, LOW);
-}
-
-void motor_1_Lui(int speed) {
-  speed = constrain(speed, MIN_SPEED, MAX_SPEED);  
-  digitalWrite(IN2, HIGH);
-  digitalWrite(IN1, LOW);
-  analogWrite(IN1, speed);
-}
-
-void loop()
-{     
-    //delay(5000);
-    motor_1_Tien(150);
-    motor_2_Tien(150); 
-  //delay(5000);//tiến 5 s
-//  motor_2_Dung();
-  //motor_1_Dung();
-//  delay(2000);
-//  motor_2_Lui(MAX_SPEED / 5); 
- //motor_1_Lui(MAX_SPEED / 5); 
-//  delay(5000);
-}
